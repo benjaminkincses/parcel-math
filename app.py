@@ -28,7 +28,7 @@ def percentage(number, total):
     return f"{100 * number/total:.1f}%" if total else "n/a"
 
 
-def render_results(data):
+def render_results(data, native=None):
     table = []
     for variant, name in (("standard", "Shipping fee"), ("landed", "Order total")):
         arm = data["arms"][variant]
@@ -41,9 +41,22 @@ def render_results(data):
     interval_text = ("Awaiting exposures in both arms." if interval is None else
                      f"95% interval {100*interval[0]:+.1f} to {100*interval[1]:+.1f} percentage points.")
     sample = sum(arm["exposed"] for arm in data["arms"].values())
+    if native:
+        inference = native["metrics"]["first_choice_within_budget"]["native_inference"]
+        source = (f"Flagsmith {native['flagsmith_version']} · PostgreSQL warehouse. "
+                  f"Native relative lift {100*inference['lift']:+.1f}% "
+                  f"(interval {100*inference['ci_low']:+.1f}% to {100*inference['ci_high']:+.1f}%).")
+        provenance = 'Recorded native platform run'
+        raw = '/api/native-results'
+        other = '<a href="/results?view=local">View this local run</a>'
+    else:
+        source = "Local SQLite analysis using the " + ("offline SDK snapshot." if flag.mode() == "offline" else "connected SDK.")
+        provenance = 'Current local run'
+        raw = '/api/results'
+        other = '<a href="/native-results">View the recorded platform run</a>'
     return Template((WEB / "results.html").read_text()).substitute(
         table="".join(table), gap=gap, interval=interval_text, sample=sample, target=data["sampleSize"],
-        mode="offline environment snapshot" if flag.mode() == "offline" else "server-connected SDK",
+        source=source, provenance=provenance, raw=raw, other=other,
         verdict="met" if data["signal"] else "not met")
 
 
@@ -103,6 +116,13 @@ class Handler(BaseHTTPRequestHandler):
                             existing = None
                     identifier, payload = exp.get_visit(db, existing or secrets.token_hex(20), demo_variant=demo)
                     return self.json_response(payload, cookie=identifier)
+                if parsed.path in ("/results", "/native-results", "/api/native-results") and (
+                        parsed.path != "/results" or parse_qs(parsed.query).get("view") != ["local"]):
+                    native = json.loads((ROOT / "evidence" / "flagsmith-readout.json").read_text())
+                    if parsed.path == "/api/native-results":
+                        return self.json_response(native)
+                    return self.send_body(200, render_results(native["app_readout"], native),
+                                          "text/html; charset=utf-8")
                 if parsed.path in ("/results", "/api/results"):
                     result = exp.report(db)
                     if parsed.path == "/api/results":
