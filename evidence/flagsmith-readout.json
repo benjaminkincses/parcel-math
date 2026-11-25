@@ -1,0 +1,92 @@
+{
+  "source": "Self-hosted Flagsmith experiment results API, checked against the application SQLite ledger",
+  "population": "600 synthetic shopper identities; same predeclared shopper policy as the offline replay, independent assignment environment",
+  "flagsmith_version": "2.290.0",
+  "sdk_version": "6.7.0",
+  "database": "PostgreSQL 16.2, Flagsmith database warehouse",
+  "as_of": "2026-11-25T21:57:24.377986Z",
+  "experiment": {
+    "id": 1,
+    "name": "Parcel Math shipping totals",
+    "status": "running",
+    "flag": "checkout_price_display",
+    "rollout_percentage": 100.0,
+    "control_value": "standard",
+    "treatment_value": "landed",
+    "treatment_percentage": 50.0
+  },
+  "exposed": {
+    "landed": 297,
+    "control": 303
+  },
+  "excluded_identities": 0,
+  "event_counts": {
+    "first_choice_within_budget": 471,
+    "shipping_option_confirmed": 554,
+    "$flag_exposure": 600
+  },
+  "metrics": {
+    "first_choice_within_budget": {
+      "name": "First choice within budget",
+      "aggregation": "occurrence",
+      "arms": {
+        "landed": {
+          "exposed": 297,
+          "converted": 251
+        },
+        "control": {
+          "exposed": 303,
+          "converted": 220
+        }
+      },
+      "native_inference": {
+        "lift": 0.1639577594123049,
+        "ci_low": 0.06534812095423542,
+        "ci_high": 0.26256739787037436,
+        "chance_to_win": 0.9994406216976998
+      }
+    },
+    "shipping_option_confirmed": {
+      "name": "Confirmed a shipping option",
+      "aggregation": "occurrence",
+      "arms": {
+        "landed": {
+          "exposed": 297,
+          "converted": 275
+        },
+        "control": {
+          "exposed": 303,
+          "converted": 279
+        }
+      },
+      "native_inference": {
+        "lift": 0.005575467941059299,
+        "ci_low": -0.04086025013230998,
+        "ci_high": 0.052011186014428584,
+        "chance_to_win": 0.5930236840917291
+      }
+    }
+  },
+  "app_readout": {
+    "source": "simulated-v1",
+    "arms": {
+      "standard": {
+        "exposed": 303,
+        "confirmed": 279,
+        "within": 220
+      },
+      "landed": {
+        "exposed": 297,
+        "confirmed": 275,
+        "within": 251
+      }
+    },
+    "sampleSize": 600,
+    "delta": 0.11904523785711907,
+    "interval": [
+      0.053503371964218144,
+      0.18336274693261956
+    ],
+    "signal": true
+  }
+}
