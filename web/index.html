@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#18382d">
+  <title>Parcel Math | Delivery checkout</title>
+  <link rel="stylesheet" href="/style.css">
+  <script src="/app.js" defer></script>
+</head>
+<body>
+  <header class="masthead">
+    <div class="mast-inner">
+      <span class="identity"><span class="parcel-icon" aria-hidden="true"></span>Parcel Math</span>
+      <span class="mast-note">Checkout demo</span>
+    </div>
+  </header>
+  <main>
+    <h1>Choose your delivery</h1>
+    <p class="intro">Pick a delivery option that keeps your order within budget.</p>
+    <p id="loading" role="status">Loading your parcel…</p>
+    <div id="error-box" class="error" hidden>
+      <p id="error-message" role="alert"></p>
+      <button type="button" id="retry" class="secondary">Try again</button>
+    </div>
+    <div id="checkout" class="checkout" hidden>
+      <aside class="summary" aria-labelledby="summary-heading">
+        <h2 id="summary-heading">Your parcel</h2>
+        <dl class="summary-list">
+          <div><dt>Item subtotal</dt><dd id="subtotal"></dd></div>
+          <div><dt>Destination</dt><dd>European Union</dd></div>
+        </dl>
+        <div class="budget">
+          <span class="budget-label">Spending cap</span>
+          <strong id="cap"></strong>
+          <span>Item and delivery combined</span>
+        </div>
+      </aside>
+      <section class="choices" aria-label="Delivery checkout">
+        <form id="delivery-form">
+          <fieldset id="delivery-set">
+            <legend>Delivery options</legend>
+            <div id="options" class="options"></div>
+          </fieldset>
+          <div class="estimate" aria-live="polite" aria-atomic="true">
+            <span>Selected order total</span>
+            <strong id="estimate">Choose an option</strong>
+          </div>
+          <button class="primary" type="submit" id="confirm" disabled>Confirm delivery</button>
+        </form>
+        <div id="result" class="result" role="status" aria-live="polite" aria-atomic="true" hidden></div>
+        <p class="payment-note">Demo only. No payment is taken.</p>
+        <p class="payment-note"><a href="/results">Experiment results</a></p>
+      </section>
+    </div>
+    <noscript>This checkout needs JavaScript to load your parcel and delivery prices.</noscript>
+  </main>
+</body>
+</html>
