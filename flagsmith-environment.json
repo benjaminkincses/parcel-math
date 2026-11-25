@@ -1,0 +1,27 @@
+{
+  "id": 1,
+  "api_key": "toggle-wars-offline-example",
+  "name": "Local checkout demo",
+  "project": {"id": 1, "name": "Toggle Wars", "segments": []},
+  "identity_overrides": [],
+  "feature_states": [
+    {
+      "featurestate_uuid": "4ee73a1c-d864-451c-8a21-da0dfbce4f79",
+      "feature": {"id": 1, "name": "checkout_price_display", "type": "MULTIVARIATE"},
+      "enabled": true,
+      "feature_state_value": "standard",
+      "multivariate_feature_state_values": [
+        {
+          "id": 1,
+          "percentage_allocation": 50,
+          "multivariate_feature_option": {"id": 1, "key": "standard", "value": "standard"}
+        },
+        {
+          "id": 2,
+          "percentage_allocation": 50,
+          "multivariate_feature_option": {"id": 2, "key": "landed", "value": "landed"}
+        }
+      ]
+    }
+  ]
+}
